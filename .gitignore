@@ -1,0 +1,6 @@
+libslackbot/
+*.pyc
+secrets.sh
+.DS_Store
+.cache
+kalibrary.db
