@@ -9,12 +9,14 @@ import sqlite3
 BOT_NAME = 'librarian'
 
 # Instantiate Slack client
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
+slack_client = SlackClient('xoxb-142634963638-O27LmkQU4gSqDGQFGtyFmUvR')
 
 # Get the bot's ID
-BOT_ID = os.environ.get("BOT_ID")
+#BOT_ID = os.environ.get("BOT_ID")
 
-VALID_COMMANDS = {'search'}
+BOT_ID = "U46JNUBJS"
+
+VALID_COMMANDS = {'search', 'map'}
 VALID_COMMAND_HELP_TEXT = [{
     "fallback": "To search for books, in #ka-library, type in `@{} search <insert keywords here>`".format(BOT_NAME),
     "color": "#36a64f",
@@ -65,10 +67,28 @@ def handle_command(command, channel, user):
     keywords = None
     attachments = []
     slack_command = None
+
+    if command == "map":
+        slack_client.api_call("chat.postMessage", channel=user,
+                              text="Getting the library map ...",
+                              as_user=True)
+        attachments = [{
+            "pretext": "Library Map!",
+            "title": "KA Library Map",
+            "text": "URL <http://www.khanacademy.org/r/library-map>",
+        }]
+
+        slack_client.api_call("chat.postMessage", channel=user,
+                              attachments=attachments, as_user=True)
+        return
+
+
     try:
         slack_command = command.split(" ")[0]
         keywords = " ".join(command.split(" ")[1:])
+        print keywords
         # If slack_command is invalid, remind user of valid command(s)
+
         if slack_command not in VALID_COMMANDS or keywords is None:
             print "Invalid command {} and keywords is None".format(slack_command)
             attachments = VALID_COMMAND_HELP_TEXT
