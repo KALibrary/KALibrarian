@@ -29,7 +29,7 @@ MAX_NUM_SLACK_ATTACHMENTS = 10
 AT_BOT = "<@" + BOT_ID + ">"
 
 # LIBRARYTHING API SEARCH URL
-LIBRARYTHING_SEARCH_API_URL = "https://www.librarything.com/api_getdata.php?userid=KA-library&key=2744260721&max=600&responseType=json&showCollections=1"
+LIBRARYTHING_SEARCH_API_URL = "https://www.librarything.com/api_getdata.php?userid=KA-library&key=2744260721&max=1000&responseType=json&showCollections=1"
 
 def get_bot_id():
     api_call = slack_client.api_call("users.list")
@@ -70,7 +70,7 @@ def handle_command(command, channel, user):
         keywords = " ".join(command.split(" ")[1:])
         # If slack_command is invalid, remind user of valid command(s)
         if slack_command not in VALID_COMMANDS or keywords is None:
-            print "Invalid and keywords is None"
+            print "Invalid command {} and keywords is None".format(slack_command)
             attachments = VALID_COMMAND_HELP_TEXT
         else:
             # DM the user to let them know the bot has started the search
@@ -106,7 +106,7 @@ def handle_command(command, channel, user):
                         del curr_attachment["pretext"]
                     attachments.append(curr_attachment)
     except Exception as e:
-        print str(e)
+        print "Error Msg: {} with command {} and keywords {}".format(str(e), slack_command, keywords)
         attachments = VALID_COMMAND_HELP_TEXT
 
     # Limit the number of returned results to 10 for now

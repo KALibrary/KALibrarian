@@ -1,7 +1,5 @@
 import sqlite3
 import json
-from pprint import pprint
-from firebase import firebase
 
 sqlite_file = 'library.db'    # name of the sqlite database file
 table_name = 'BOOKS'  # name of the table to be created
@@ -39,14 +37,6 @@ with open('books.json') as data_file:
 # Committing changes and closing the connection to the database file
 conn.commit()
 conn.close()
-
-
-firebase = firebase.FirebaseApplication('https://your_storage.firebaseio.com', None)
-result = firebase.get('/users', None)
-print result
-{'1': 'John Doe', '2': 'Jane Doe'}
-
-
 
 
 
